@@ -2,21 +2,30 @@
 msg1:   .asciiz "Digite um numero primo responsavel pelo modulo: "
 msg2:   .asciiz "Digite o numero do inverso multiplicativo: "
 n_prime: .asciiz "O modulo nao eh primo."
-inv_mult: .asciiz "O inverso multiplicativo eh"
+inv_mult: .asciiz "O inverso multiplicativo e: "
         .text
 
 #Parte principal do codigo
 main:
         la $a0, msg1    #carrega o endereco da msg1 em $a0
-        jal r_interger  #chama a funcao r_interger
+        jal r_integer  #chama a funcao r_interger
         move $s0, $v0   #carrega o numero inteiro lido em $s0
 
         la $a0, msg2    #carrega o endereco da msg2 em $a0
-        jal r_interger  #chama a funcao r_interger
+        jal r_integer  #chama a funcao r_interger
         move $s1, $a0   #carrega o numero inteiro lido em $s1
 
-        move $a0, $s0   #
-        jal is_prime    #
+
+        move $a0, $s0   #carrega a chamada
+        jal is_prime    #chama a função 
+        
+	move $t1, $v0  #salva o valor da condição	
+	
+	beq $v0, $zero, print_out_prime #se não for primo mostra na tela
+	#calculo do inverso 
+	
+		
+	return_prime:
 
         li $v0, 10      #carrega variavel para terminar a execucao do programa
         syscall         #finaliza o programa
@@ -86,6 +95,21 @@ end_print_error:
 
 #Imprime saida
 #$a0 : numero inverso multiplicativo calculado
-print_out:
+print_out_prime:
 
-end_print_out:
+	la $a0, n_prime
+	li $a1, 1
+	li $v0, 55
+	syscall
+j return_prime
+end_print_out_prime:	
+#imprime o inverto multiplicativo no registrador $v0
+print_out_inv:
+
+	la $a0, inv_mult #mostra a string
+	move $a1, $v0 #movimenta o primo para $a1 
+	li $v0, 56
+	syscall 
+
+	
+end_print_out_inv:
