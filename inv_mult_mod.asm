@@ -36,7 +36,37 @@ end_r_integer:
 
 
 #Verifica se e um numero primo
+#$a0: possivel numero primo
 is_prime:
+        beqz $a0, not_prime     #verifica se $a0 eh zero se sim o numero nao eh primo
+        beq $a0, 2, prime       #verifica se o numero em $a0 eh 2 se for eh primo
+        beq $a0, 1, prime       #verifica se o numero em $a0 eh 1 se for eh primo
+        and $t0, $a0, 0x00000001#faz o and entre $a0 e 1, pra verificar se o numero eh par
+        beqz $t0, not_prime     #caso o numero for par o numero nao eh primo
+        li $t0, 3       #carrega o contador $t0 com numero 3
+
+while_is_prime:
+        bge $t0, $a0, prime     #caso o numero for maior ou igual ao contador $t0 o numero eh primo
+
+        div $a0, $t0    #divide o numero passado para o contador $t0
+        mfhi $t1        #carrega o mod da divisao da linha cima
+
+if_is_prime:
+        beqz $t1, not_prime     #verifica se $t1 eh igual a zero, se for o numero nao eh primo
+end_if_is_prime:
+
+        addi $t0, $t0, 2        #adiciona 2 ao numero $t0 e guarta o resultado em $t0
+        j while_is_prime        #pula para o while_is_prime
+end_while_is_prime:
+
+
+prime:
+        move $v0, $a0   #Carrega o numero $a0 ao valor de retorno $v0
+        jr $ra          #sai da funcao
+
+not_prime:
+        move $v0, $zero #Carrega o numero 0 ao valor de retorno $v0
+        jr $ra          #sai da funcao
 
 end_is_prime:
 
