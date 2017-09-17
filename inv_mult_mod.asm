@@ -13,7 +13,7 @@ main:
 
         la $a0, msg2    #carrega o endereco da msg2 em $a0
         jal r_integer  #chama a funcao r_interger
-        move $s1, $a0   #carrega o numero inteiro lido em $s1
+        move $s1, $v0   #carrega o numero inteiro lido em $s1
 
 
         move $a0, $s0   #carrega a chamada
@@ -24,7 +24,10 @@ main:
 	beq $v0, $zero, print_out_prime #se não for primo mostra na tela
 	#calculo do inverso 
 	
-		
+	j calc_inv
+	
+	return_inv:
+	
 	return_prime:
 
         li $v0, 10      #carrega variavel para terminar a execucao do programa
@@ -82,7 +85,19 @@ end_is_prime:
 
 #calcula o inverso multiplicativo modular
 calc_inv:
+	xor $t0, $t0, $t0 #zerando o contador 
 
+	while_calc:
+		addi $t0, $t0, 1 #incrementa o contador
+		mult $s0,$t0 #multiplica  A*C
+		mflo $t1  #pegando o resultado da multiplicação
+ 		div $t1, $s1 # A*C /  B
+ 		mfhi $t1 # pegando o resto de da divião  
+
+		
+		
+	bne $t1, 1, while_calc
+	j print_out_inv
 end_calc_inv:
 
 
@@ -107,9 +122,9 @@ end_print_out_prime:
 print_out_inv:
 
 	la $a0, inv_mult #mostra a string
-	move $a1, $v0 #movimenta o primo para $a1 
+	move $a1, $t0 #movimenta o primo para $a1 
 	li $v0, 56
 	syscall 
-
+	j return_inv
 	
 end_print_out_inv:
