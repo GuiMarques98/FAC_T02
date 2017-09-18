@@ -28,4 +28,4 @@
 ## Restrições
 <p>As restrições para o programa são:</p>
  * Ambos os números terão que ser positivos maiores que zero,
- * Só serão aceitos números tal que A*B <= 2³².
+ * Só serão aceitos números tal que A*B <= 2³¹-1.
